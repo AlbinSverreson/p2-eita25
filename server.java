@@ -6,15 +6,37 @@ import java.security.KeyStore;
 import javax.net.*;
 import javax.net.ssl.*;
 import javax.security.cert.X509Certificate;
+import java.java.util.*;
 
 public class server implements Runnable {
     private ServerSocket serverSocket = null;
     private static int numConnectedClients = 0;
 
+    private List<Person> users;
+    private HashMap<Person,Record> patients;
+    private Logger logger;
+    private Authenticator auth;
+
     public server(ServerSocket ss) throws IOException {
         serverSocket = ss;
         newListener();
     }
+
+    // our own methods
+
+    private void loadRecords(){
+
+    }
+
+    private void loadPeople(){
+
+    }
+
+    private void askAction(){
+      
+    }
+
+    // existing methods
 
     public void run() {
         try {
