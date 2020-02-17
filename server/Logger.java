@@ -4,7 +4,7 @@ public class Logger{
 
   private File file;
 
-  public void log(){
+  public void log(String logMessage){
     
   }
 
