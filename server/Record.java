@@ -10,9 +10,13 @@ public class Record{
   private String division;
   private String info;
 
-  public Record(String p, String d, String n, String d, String i){
+  public static void main(String args[]) {
+	  System.out.println("hej");
+  }
+
+  public Record(String p, String doc, String n, String d, String i){
     patient = p;
-    doctor = d;
+    doctor = doc;
     nurse = n;
     division = d;
     info = i;
@@ -45,6 +49,7 @@ public class Record{
     sb.append("Nurse: ").append(nurse).append("\n");
     sb.append("Hospital division: ").append(division).append("\n");
     sb.append("\n").append("Information: ").append(info);
+    return sb.toString();
   }
 
 }

@@ -10,7 +10,7 @@ public class Server implements Runnable {
     private ServerSocket serverSocket = null;
     private static int numConnectedClients = 0;
     private List<Person> persons;
-    private Map<Person,Records> patients;
+    private Map<String,Records> patients;
     private Logger logger;
     private Authenticator authenticator;
 
@@ -18,17 +18,17 @@ public class Server implements Runnable {
         serverSocket = ss;
         newListener();
     }
-    
+
     private void loadRecords() {
-    	
+
     }
-    
+
     private void loadPersons() {
-    	
+
     }
-    
+
     private void askForAction() {
-    	
+
     }
 
     public void run() {
