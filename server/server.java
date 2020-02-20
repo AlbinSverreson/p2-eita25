@@ -8,10 +8,26 @@ import javax.security.cert.X509Certificate;
 public class server implements Runnable {
     private ServerSocket serverSocket = null;
     private static int numConnectedClients = 0;
+    private List<Person> persons;
+    private Map<Person,Records> patients;
+    private Logger logger;
+    private Authenticator authenticator;
 
     public server(ServerSocket ss) throws IOException {
         serverSocket = ss;
         newListener();
+    }
+    
+    private void loadRecords() {
+    	
+    }
+    
+    private void load Persons() {
+    	
+    }
+    
+    private void askForAction() {
+    	
     }
 
     public void run() {
