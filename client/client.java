@@ -21,9 +21,7 @@ public class client {
         Console cons = System.console();
         String host = null;
         int port = -1;
-        for (int i = 0; i < args.length; i++) {
-            System.out.println("args[" + i + "] = " + args[i]);
-        }
+        System.out.println("Connecting to " + args[0] + " on port " + args[1]);
         if (args.length < 2) {
             System.out.println("USAGE: java client host port");
             System.exit(-1);
@@ -61,7 +59,6 @@ public class client {
                 throw new IOException(e.getMessage());
             }
             SSLSocket socket = (SSLSocket)factory.createSocket(host, port);
-            System.out.println("\nsocket before handshake:\n" + socket + "\n");
 
             /*
              * send http request
