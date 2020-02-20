@@ -3,7 +3,7 @@ package server;
 import java.lang.*;
 
 public class Record{
-
+  private String id;
   private String patient;
   private String doctor;
   private String nurse;
@@ -14,12 +14,17 @@ public class Record{
 	  System.out.println("hej");
   }
 
-  public Record(String p, String doc, String n, String d, String i){
+  public Record(String id, String p, String doc, String n, String d, String i){
+    this.id = id;
     patient = p;
     doctor = doc;
     nurse = n;
     division = d;
     info = i;
+  }
+
+  public String getID() {
+    return id;
   }
 
   public String getPatient(){
@@ -44,6 +49,7 @@ public class Record{
 
   public String toString(){
     StringBuilder sb = new StringBuilder();
+    sb.append("Record ID: ").append(id).append("\n");
     sb.append("Patient: ").append(patient).append("\n");
     sb.append("Doctor: ").append(doctor).append("\n");
     sb.append("Nurse: ").append(nurse).append("\n");
