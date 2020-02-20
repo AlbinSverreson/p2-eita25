@@ -10,7 +10,7 @@ public class Server implements Runnable {
     private ServerSocket serverSocket = null;
     private static int numConnectedClients = 0;
     private List<Person> persons;
-    private Map<String,List<Records>> patients;
+    private Map<String,List<Record>> patients;
     private Logger logger;
     private Authenticator authenticator;
 
@@ -31,6 +31,42 @@ public class Server implements Runnable {
 
     }
 
+
+    private String getRecords(Person p, String name){
+        return ""; //TODO metod som tar in en person och ett namn på en patient och returnerar på något sätt listan med records som p har access till
+    }
+
+    private String handleCommand(String msg, Person p){//DENNA ÄR LITE FEL DÅ AUTHEN>TICATOR SKA GÖRA LOGIKEN GÖR OM GÖR RÄTT
+        String[] words = msg.split(" ");
+        switch(words[0]){
+            case "list":
+                if(words[1]==p.getName() || p.isRole("Doctor") || p.isRole("Nurse") || p.isRole("Government")){
+                    return getRecords(p, words[1]);    
+                }
+                else{
+                    return "You don't have access to that.";
+                }
+            case "show":
+                Record record = getRecord(words[1]);
+                if(record==null) return "Record doesn't exist.";
+                if(words[1]==p.getName() ||
+                   p.isRole("Doctor") && record.getDoctor()==p.getName() ||
+                   p.isRole("Nurse") && record.getNurse()==p.getName()
+                  ){
+
+                }
+            break;
+            case "write":
+            break;
+            case "delete":
+            break;
+            case "create":
+            break;
+            default:
+                return "Wrong syntax";
+        }
+    }
+
     public void run() {
         try {
             SSLSocket socket=(SSLSocket)serverSocket.accept();
@@ -41,7 +77,7 @@ public class Server implements Runnable {
             String issuer = cert.getIssuerDN().getName();
             String serial = cert.getSerialNumber().toString();
     	    numConnectedClients++;
-            System.out.println("client connected");
+            System.out.println("Client connected");
             System.out.println("client name (cert subject DN field): " + subject);
             System.out.println("Issuer: " + issuer);
             System.out.println("Certificate serial number: " + serial);
@@ -54,9 +90,7 @@ public class Server implements Runnable {
 
             String clientMsg = null;
             while ((clientMsg = in.readLine()) != null) {
-			    String rev = new StringBuilder(clientMsg).reverse().toString();
-                System.out.println("received '" + clientMsg + "' from client");
-                System.out.print("sending '" + rev + "' to client...");
+                String response = handleCommand(clientMsg);
 				out.println(rev);
 				out.flush();
                 System.out.println("done\n");
