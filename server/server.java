@@ -10,7 +10,7 @@ public class Server implements Runnable {
     private ServerSocket serverSocket = null;
     private static int numConnectedClients = 0;
     private List<Person> persons;
-    private Map<String,Records> patients;
+    private Map<String,List<Records>> patients;
     private Logger logger;
     private Authenticator authenticator;
 
