@@ -1,33 +1,34 @@
 import java.io.*;
 import java.net.*;
 import java.security.KeyStore;
+import java.util.*;
 import javax.net.*;
 import javax.net.ssl.*;
 import javax.security.cert.X509Certificate;
 
-public class server implements Runnable {
+public class Server implements Runnable {
     private ServerSocket serverSocket = null;
     private static int numConnectedClients = 0;
     private List<Person> persons;
-    private Map<Person,Records> patients;
+    private Map<String,Records> patients;
     private Logger logger;
     private Authenticator authenticator;
 
-    public server(ServerSocket ss) throws IOException {
+    public Server(ServerSocket ss) throws IOException {
         serverSocket = ss;
         newListener();
     }
-    
+
     private void loadRecords() {
-    	
+
     }
-    
-    private void load Persons() {
-    	
+
+    private void loadPersons() {
+
     }
-    
+
     private void askForAction() {
-    	
+
     }
 
     public void run() {
@@ -86,7 +87,7 @@ public class server implements Runnable {
             ServerSocketFactory ssf = getServerSocketFactory(type);
             ServerSocket ss = ssf.createServerSocket(port);
             ((SSLServerSocket)ss).setNeedClientAuth(true); // enables client authentication
-            new server(ss);
+            new Server(ss);
         } catch (IOException e) {
             System.out.println("Unable to start Server: " + e.getMessage());
             e.printStackTrace();

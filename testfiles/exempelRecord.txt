@@ -1,0 +1,12 @@
+Patient;Doctor;Nurse;Division
+Info
+$%$
+Carl;Diana;Alice;Akuten
+Info rad 1
+Info rad 2
+Info rad 3
+$%$
+Frank;Dina;Alice;BB
+Frank på BB
+det är kul
+$%$
