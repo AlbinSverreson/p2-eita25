@@ -25,6 +25,10 @@ public class Person{
     return name;
   }
 
+  public String getRole(){
+    return role;
+  }
+
   public void addPatient(String p){
     patients.add(p);
   }
