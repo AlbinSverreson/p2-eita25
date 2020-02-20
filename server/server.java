@@ -87,7 +87,7 @@ public class Server implements Runnable {
             ServerSocketFactory ssf = getServerSocketFactory(type);
             ServerSocket ss = ssf.createServerSocket(port);
             ((SSLServerSocket)ss).setNeedClientAuth(true); // enables client authentication
-            new server(ss);
+            new Server(ss);
         } catch (IOException e) {
             System.out.println("Unable to start Server: " + e.getMessage());
             e.printStackTrace();

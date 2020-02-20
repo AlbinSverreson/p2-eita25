@@ -11,14 +11,14 @@ public class Person{
     name = n;
     role = r;
     division = d;
-    patients = new HashSet();
+    patients = new HashSet<>();
   }
 
   public Person(String n, String r){
     name = n;
     role = r;
     division = null;
-    patients = new HashSet();
+    patients = new HashSet<>();
   }
 
   public String getName(){
