@@ -4,6 +4,7 @@ import javax.net.ssl.*;
 import javax.security.cert.X509Certificate;
 import java.security.KeyStore;
 import java.security.cert.*;
+import java.io.Console;
 
 /*
  * This example shows how to set up a key manager to perform client
@@ -15,7 +16,9 @@ import java.security.cert.*;
  */
 public class client {
 
+
     public static void main(String[] args) throws Exception {
+        Console cons = System.console();
         String host = null;
         int port = -1;
         for (int i = 0; i < args.length; i++) {
@@ -36,14 +39,20 @@ public class client {
         try { /* set up a key manager for client authentication */
             SSLSocketFactory factory = null;
             try {
-                char[] password = "password".toCharArray();
+                System.out.println("Welcome to whatever");
+                System.out.println("What is the name of your keystore?");
+                String ksName = cons.readLine();
+                System.out.println("What is the name of your truststore?");
+                String tsName = cons.readLine();
+                System.out.println("What is your password? ;)");
+                char[] password = cons.readPassword();
                 KeyStore ks = KeyStore.getInstance("JKS");
                 KeyStore ts = KeyStore.getInstance("JKS");
                 KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
                 TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
                 SSLContext ctx = SSLContext.getInstance("TLS");
-                ks.load(new FileInputStream("../certificates/clientKS"), password);  // keystore password (storepass)
-				ts.load(new FileInputStream("../certificates/clientTS"), password); // truststore password (storepass);
+                ks.load(new FileInputStream("../certificates/" + ksName), password);  // keystore password (storepass)
+				ts.load(new FileInputStream("../certificates/" + tsName), password); // truststore password (storepass);
 				kmf.init(ks, password); // user password (keypass)
 				tmf.init(ts); // keystore can be used as truststore here
 				ctx.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
@@ -71,8 +80,7 @@ public class client {
             System.out.println("certificate name (subject DN field) on certificate received from server:\n" + subject + "\n");
             System.out.println("Issuer: " + issuer);
             System.out.println("Certificate serial number: " + serial);
-            System.out.println("socket after handshake:\n" + socket + "\n");
-            System.out.println("secure connection established\n\n");
+            System.out.println("Secure connection established\n\n");
 
             BufferedReader read = new BufferedReader(new InputStreamReader(System.in));
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
@@ -80,16 +88,14 @@ public class client {
             String msg;
 			for (;;) {
                 System.out.print(">");
-                msg = read.readLine();
+                msg = read.readLine(); //LÄSER IN MEDDELANDE ATT SKICKA
                 if (msg.equalsIgnoreCase("quit")) {
 				    break;
-				}
-                System.out.print("sending '" + msg + "' to server...");
-                out.println(msg);
+                }
+                out.println(msg);//Skickar meddelandet till servern
                 out.flush();
-                System.out.println("done");
 
-                System.out.println("received '" + in.readLine() + "' from server\n");
+                System.out.println(in.readLine());//SKRIVER UT DET DEN TAR EMOT
             }
             in.close();
 			out.close();
