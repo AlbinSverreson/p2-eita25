@@ -1,11 +1,12 @@
 import java.io.*;
 import java.net.*;
 import java.security.KeyStore;
+import java.util.*;
 import javax.net.*;
 import javax.net.ssl.*;
 import javax.security.cert.X509Certificate;
 
-public class server implements Runnable {
+public class Server implements Runnable {
     private ServerSocket serverSocket = null;
     private static int numConnectedClients = 0;
     private List<Person> persons;
@@ -13,7 +14,7 @@ public class server implements Runnable {
     private Logger logger;
     private Authenticator authenticator;
 
-    public server(ServerSocket ss) throws IOException {
+    public Server(ServerSocket ss) throws IOException {
         serverSocket = ss;
         newListener();
     }
@@ -22,7 +23,7 @@ public class server implements Runnable {
     	
     }
     
-    private void load Persons() {
+    private void loadPersons() {
     	
     }
     

@@ -1,5 +1,5 @@
 package server;
-import java.java.util.*;
+import java.util.*;
 
 public class Person{
   private String name;
@@ -11,6 +11,13 @@ public class Person{
     name = n;
     role = r;
     division = d;
+    patients = new HashSet();
+  }
+
+  public Person(String n, String r){
+    name = n;
+    role = r;
+    division = null;
     patients = new HashSet();
   }
 
