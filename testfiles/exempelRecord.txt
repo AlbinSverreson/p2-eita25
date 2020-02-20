@@ -1,12 +1,17 @@
-Patient;Doctor;Nurse;Division
+1;Patient;Doctor;Nurse;Division
 Info
 $%$
-Carl;Diana;Alice;Akuten
+2;Carl;Diana;Alice;Akuten
 Info rad 1
 Info rad 2
 Info rad 3
 $%$
-Frank;Dina;Alice;BB
+3;Frank;Dina;Alice;BB
 Frank på BB
 det är kul
+$%$
+4;Carl;Diana;Alice;Rehab
+Återbesök
+Rutinkontroll
+OK
 $%$

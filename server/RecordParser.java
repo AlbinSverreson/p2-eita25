@@ -13,15 +13,16 @@ public class RecordParser {
   }
 
   public static Map<String,List<Record>> parse(String recordFile) {
-    Map<String,Record> records = new HashMap<String,Record>();
+    Map<String,List<Record>> records = new HashMap<String,List<Record>>();
     try {
       BufferedReader br = new BufferedReader(new FileReader(recordFile));
       while (br.ready()) {
           List<String> line = Arrays.asList(br.readLine().split(";"));
-          String patient = line.get(0);
-          String doctor = line.get(1);
-          String nurse = line.get(2);
-          String hostpitalDivision = line.get(3);
+          String id = line.get(0);
+          String patient = line.get(1);
+          String doctor = line.get(2);
+          String nurse = line.get(3);
+          String hostpitalDivision = line.get(4);
 
           StringBuilder infoSb = new StringBuilder();
           if (br.ready()) {
@@ -32,9 +33,10 @@ public class RecordParser {
             }
           }
           String info = infoSb.toString();
-          Record record = new Record(patient, doctor, nurse, hostpitalDivision, info);
+          Record record = new Record(id, patient, doctor, nurse, hostpitalDivision, info);
+
           if (records.containsKey(patient)){
-            records.put(patient, records.get(patient).add(record););
+            records.get(patient).add(record);
           } else {
             List<Record> newRecordList = new ArrayList<Record>();
             newRecordList.add(record);
