@@ -12,7 +12,7 @@ public class RecordParser {
     parse("testfiles/exempelRecord.txt");
   }
 
-  public static Map<String,Record> parse(String recordFile) {
+  public static Map<String,List<Record>> parse(String recordFile) {
     Map<String,Record> records = new HashMap<String,Record>();
     try {
       BufferedReader br = new BufferedReader(new FileReader(recordFile));
@@ -33,7 +33,14 @@ public class RecordParser {
           }
           String info = infoSb.toString();
           Record record = new Record(patient, doctor, nurse, hostpitalDivision, info);
-          records.put(patient, record);
+          if (records.containsKey(patient)){
+            records.put(patient, records.get(patient).add(record););
+          } else {
+            List<Record> newRecordList = new ArrayList<Record>();
+            newRecordList.add(record);
+            records.put(patient, newRecordList);
+          }
+
         }
       br.close();
     } catch (IOException e) {
