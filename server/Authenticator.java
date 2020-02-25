@@ -3,8 +3,8 @@ package server;
 public class Authenticator{
   private Logger logger;  // don't forget to log every action
 
-  public Authenticator(Logger l){
-    logger = new Logger("testfiles/authLog.txt");
+  public Authenticator(String filename){
+    logger = new Logger(filename);
   }
 
   public  boolean canRead(Person p, Record r){
@@ -34,7 +34,7 @@ public class Authenticator{
   public boolean canWrite(Person p, Record r){
     String name = p.getName();
     String role = p.getRole();
-    patient = r.getPatient();
+    String patient = r.getPatient();
     String id = r.getID();
 
     if (p.isRole("Patient")) {

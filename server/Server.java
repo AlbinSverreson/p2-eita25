@@ -11,7 +11,6 @@ public class Server implements Runnable {
     private static int numConnectedClients = 0;
     private List<Person> persons;
     private Map<String,List<Record>> patients;
-    private Logger logger;
     private Authenticator authenticator;
 
     public Server(ServerSocket ss) throws IOException {
