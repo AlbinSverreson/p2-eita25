@@ -53,7 +53,7 @@ public class Server implements Runnable {
             }
         }
 
-    private String handleCommand(String msg, Person p){//DENNA ÄR LITE FEL DÅ AUTHENATICATOR SKA GÖRA LOGIKEN GÖR OM GÖR RÄTT
+    private String handleCommand(String msg, Person p, BufferedReader in, PrintWriter out){//DENNA ÄR LITE FEL DÅ AUTHENATICATOR SKA GÖRA LOGIKEN GÖR OM GÖR RÄTT
         String[] words = msg.split(" ");
         //if (words.length == 2) {
             switch (words[0]) {
@@ -104,6 +104,30 @@ public class Server implements Runnable {
                     break;
                 case "create":
                     if (words.length != 2) return "Wrong syntax";
+                    int newRecId = records.size() + 1;
+                    Person patient;
+                    String nurseName;
+                    String divisionName;
+                    String info;
+                    for (Person p1 : persons){
+                        if (p1.getName()==words[1]) patient = p1;
+                    }
+                    if(patient==null) return "No such patient in the system";
+                    if(!authenticator.canCreate(p, patient)) return "You do not have the permissions to create that record.";
+
+                    out.println("What is the name of the nurse?");
+                    nurseName = in.readLine();
+                    out.println("What is the name of the division?");
+                    divisionName = in.readLine();
+                    out.println("What info should be stored in the record?");
+                    info = in.readLine();
+
+                    records.put(newRecId, new Record(
+                        Integer.toString(newRecId), patient.getName(), p.getName(), nurseName, divisionName, info
+                    ));
+
+                    return "Record created.";
+
                     break;
                 default:
                     return "Wrong syntax";
@@ -163,7 +187,7 @@ public class Server implements Runnable {
 
             String clientMsg = null;
             while ((clientMsg = in.readLine()) != null) {
-                String response = handleCommand(clientMsg, currentClient);
+                String response = handleCommand(clientMsg, currentClient, in, out);
                 out.print(response);
                 out.println("");
                 out.println("");
