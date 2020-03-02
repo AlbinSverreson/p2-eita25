@@ -1,0 +1,6 @@
+Alice;Doctor;Akuten;Eva,Carl
+Bob;Doctor;BB;Eva
+Carl;Patient;;
+Diana;Nurse;Akuten;Eva,Carl
+Eva;Patient;;
+Frank;Nurse;BB;Eva
