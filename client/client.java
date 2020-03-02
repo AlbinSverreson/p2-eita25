@@ -93,7 +93,12 @@ public class Client {
                 out.println(msg);//Skickar meddelandet till servern
                 out.flush();
 
-                System.out.println(in.readLine());//SKRIVER UT DET DEN TAR EMOT
+                String answer = null;
+
+                while(!(answer=in.readLine()).equals("")) { 
+                    System.out.println(answer); //SKRIVER UT DET DEN TAR EMOT
+                }
+                
             }
             in.close();
 			out.close();

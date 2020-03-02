@@ -54,7 +54,7 @@ public class Record{
     sb.append("Doctor: ").append(doctor).append("\n");
     sb.append("Nurse: ").append(nurse).append("\n");
     sb.append("Hospital division: ").append(division).append("\n");
-    sb.append("\n").append("Information: ").append(info);
+    sb.append("Information: ").append(info);
     return sb.toString();
   }
 

@@ -12,6 +12,7 @@ public class Server implements Runnable {
     private static int numConnectedClients = 0;
     private List<Person> persons;
     private Map<String,List<Record>> patients;
+    private Map<Integer, Record> records;
     private Authenticator authenticator = new Authenticator("./testfiles/log.txt");
 
     public Server(ServerSocket ss) throws IOException {
@@ -21,6 +22,12 @@ public class Server implements Runnable {
 
     private void loadRecords() {
         patients = RecordParser.parse("./testfiles/exempelRecord.txt");
+        records = new HashMap<>();
+        for (List<Record> l : patients.values()) {
+            for (Record r : l) {
+            records.put(Integer.parseInt(r.getID()), r);
+            }
+        }
     }
 
     private void loadPersons() {
@@ -56,15 +63,18 @@ public class Server implements Runnable {
             switch (words[0]) {
                 case "list":
                     return getRecords(p, words[1]);
-                case "show":
-                    // Record record = getRecord(words[1]);
-                    // if (record == null)
-                    //     return "Record doesn't exist.";
-                    // if (words[1] == p.getName() || p.isRole("Doctor") && record.getDoctor() == p.getName()
-                    //         || p.isRole("Nurse") && record.getNurse() == p.getName()) {
-
-                    // }
-                    break;
+                case "read":
+                    try {
+                        int requestedRec = Integer.parseInt(words[1]);
+                        Record rec = records.get(requestedRec);
+                        if (rec!= null && authenticator.canRead(p, rec)) {
+                            return rec.toString();
+                        } else {
+                            return "You don't have access to this record, or it does not exist.";
+                        }                        
+                    } catch (NumberFormatException e) {
+                        return "The second argument needs to be a number.";
+                    }
                 case "write":
                     break;
                 case "delete":
@@ -88,7 +98,7 @@ public class Server implements Runnable {
             String issuer = cert.getIssuerDN().getName();
             String serial = cert.getSerialNumber().toString();
             numConnectedClients++;
-            
+
             // these two lines are filtering out the clients name.
             String subjectNameCN =  subject.split(" ")[0]; 
             String subjectName = subjectNameCN.substring(3, subjectNameCN.length()-1);
@@ -130,7 +140,9 @@ public class Server implements Runnable {
             String clientMsg = null;
             while ((clientMsg = in.readLine()) != null) {
                 String response = handleCommand(clientMsg, currentClient);
-				out.println(response);
+                out.print(response);
+                out.println("");
+                out.println("");
 				out.flush();
                 System.out.println("done\n");
 			}
