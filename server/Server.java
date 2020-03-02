@@ -1,3 +1,4 @@
+package server;
 import java.io.*;
 import java.net.*;
 import java.security.KeyStore;
@@ -11,7 +12,7 @@ public class Server implements Runnable {
     private static int numConnectedClients = 0;
     private List<Person> persons;
     private Map<String,List<Record>> patients;
-    private Authenticator authenticator;
+    private Authenticator authenticator = new Authenticator("./testfiles/log.txt");
 
     public Server(ServerSocket ss) throws IOException {
         serverSocket = ss;
@@ -19,11 +20,11 @@ public class Server implements Runnable {
     }
 
     private void loadRecords() {
-
+        patients = RecordParser.parse("./testfiles/exempelRecord.txt");
     }
 
     private void loadPersons() {
-
+        persons = PersonParser.createPersons("./testfiles/persons.txt");
     }
 
     private void askForAction() {
@@ -32,38 +33,49 @@ public class Server implements Runnable {
 
 
     private String getRecords(Person p, String name){
-        return ""; //TODO metod som tar in en person och ett namn på en patient och returnerar på något sätt listan med records som p har access till
-    }
-
-    private String handleCommand(String msg, Person p){//DENNA ÄR LITE FEL DÅ AUTHEN>TICATOR SKA GÖRA LOGIKEN GÖR OM GÖR RÄTT
-        String[] words = msg.split(" ");
-        switch(words[0]){
-            case "list":
-                if(words[1]==p.getName() || p.isRole("Doctor") || p.isRole("Nurse") || p.isRole("Government")){
-                    return getRecords(p, words[1]);    
+            try {
+                List<Record> patientsRecords = patients.get(name);
+                List<Record> permittedRecords = authenticator.canList(p, patientsRecords);
+                if (permittedRecords.isEmpty()) {
+                    return "You don't have read access for any of " + name + "'s records, or no such patient was found.";
+                } else {
+                    String recordString = "";
+                    for (Record r : permittedRecords) {
+                        recordString += "#" + r.getID() + " ";
+                    }
+                    return "ID's of records you have access to: " + recordString;
                 }
-                else{
-                    return "You don't have access to that.";
-                }
-            case "show":
-                Record record = getRecord(words[1]);
-                if(record==null) return "Record doesn't exist.";
-                if(words[1]==p.getName() ||
-                   p.isRole("Doctor") && record.getDoctor()==p.getName() ||
-                   p.isRole("Nurse") && record.getNurse()==p.getName()
-                  ){
-
-                }
-            break;
-            case "write":
-            break;
-            case "delete":
-            break;
-            case "create":
-            break;
-            default:
-                return "Wrong syntax";
+            } catch(NullPointerException e) {
+                return "You don't have read access for any of" + name + "'s records, or no such patient was found.";
+            }
         }
+
+    private String handleCommand(String msg, Person p){//DENNA ÄR LITE FEL DÅ AUTHENATICATOR SKA GÖRA LOGIKEN GÖR OM GÖR RÄTT
+        String[] words = msg.split(" ");
+        if (words.length == 2) {
+            switch (words[0]) {
+                case "list":
+                    return getRecords(p, words[1]);
+                case "show":
+                    // Record record = getRecord(words[1]);
+                    // if (record == null)
+                    //     return "Record doesn't exist.";
+                    // if (words[1] == p.getName() || p.isRole("Doctor") && record.getDoctor() == p.getName()
+                    //         || p.isRole("Nurse") && record.getNurse() == p.getName()) {
+
+                    // }
+                    break;
+                case "write":
+                    break;
+                case "delete":
+                    break;
+                case "create":
+                    break;
+                default:
+                    return "Wrong syntax";
+            }
+        }
+        return "";
     }
 
     public void run() {
@@ -75,7 +87,35 @@ public class Server implements Runnable {
             String subject = cert.getSubjectDN().getName();
             String issuer = cert.getIssuerDN().getName();
             String serial = cert.getSerialNumber().toString();
-    	    numConnectedClients++;
+            numConnectedClients++;
+            
+            // these two lines are filtering out the clients name.
+            String subjectNameCN =  subject.split(" ")[0]; 
+            String subjectName = subjectNameCN.substring(3, subjectNameCN.length()-1);
+
+            int i = 0;
+            boolean isFound = false;
+            Person currentClient = null;
+            loadPersons();
+            loadRecords();
+
+            while (!isFound && i<persons.size()) {
+                Person p = persons.get(i);
+                if (p.getName().equals(subjectName)) {
+                    currentClient = p;
+                    isFound = true;
+                }
+                i++;
+            }
+            
+            if (!isFound) {
+                socket.close();
+                numConnectedClients--;
+                System.out.println("invalid login");
+                //Här vill vi kasta ut klienten, just nu händer inget för klienten. Den får dock ingen åtkomst.
+                return;
+            }
+
             System.out.println("Client connected");
             System.out.println("client name (cert subject DN field): " + subject);
             System.out.println("Issuer: " + issuer);
@@ -89,8 +129,8 @@ public class Server implements Runnable {
 
             String clientMsg = null;
             while ((clientMsg = in.readLine()) != null) {
-                String response = handleCommand(clientMsg);
-				out.println(rev);
+                String response = handleCommand(clientMsg, currentClient);
+				out.println(response);
 				out.flush();
                 System.out.println("done\n");
 			}
@@ -138,8 +178,8 @@ public class Server implements Runnable {
 				KeyStore ts = KeyStore.getInstance("JKS");
                 char[] password = "password".toCharArray();
 
-                ks.load(new FileInputStream("../certificates/serverKS"), password);  // keystore password (storepass)
-                ts.load(new FileInputStream("../certificates/serverTS"), password); // truststore password (storepass)
+                ks.load(new FileInputStream("./certificates/serverKS"), password);  // keystore password (storepass)
+                ts.load(new FileInputStream("./certificates/serverKS"), password); // truststore password (storepass)
                 kmf.init(ks, password); // certificate password (keypass)
                 tmf.init(ts);  // possible to use keystore as truststore here
                 ctx.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);

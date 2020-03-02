@@ -10,7 +10,7 @@ public class Logger{
   private File file;
 
   public static void main(String[] args) {
-    Logger logger = new Logger("testfiles/log.txt");
+    Logger logger = new Logger("./testfiles/log.txt");
     logger.log("Hejhej");
     logger.log("Hallå");
   }

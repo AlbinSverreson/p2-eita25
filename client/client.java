@@ -1,3 +1,4 @@
+package client;
 import java.net.*;
 import java.io.*;
 import javax.net.ssl.*;
@@ -14,7 +15,7 @@ import java.io.Console;
  * The application can be modified to connect to a server outside
  * the firewall by following SSLSocketClientWithTunneling.java.
  */
-public class client {
+public class Client {
 
 
     public static void main(String[] args) throws Exception {
@@ -49,8 +50,8 @@ public class client {
                 KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
                 TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
                 SSLContext ctx = SSLContext.getInstance("TLS");
-                ks.load(new FileInputStream("../certificates/" + ksName), password);  // keystore password (storepass)
-				ts.load(new FileInputStream("../certificates/" + tsName), password); // truststore password (storepass);
+                ks.load(new FileInputStream("./certificates/" + ksName), password);  // keystore password (storepass)
+				ts.load(new FileInputStream("./certificates/" + tsName), password); // truststore password (storepass);
 				kmf.init(ks, password); // user password (keypass)
 				tmf.init(ts); // keystore can be used as truststore here
 				ctx.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);

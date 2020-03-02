@@ -1,17 +1,20 @@
-1;Patient;Doctor;Nurse;Division
-Info
+1;Eva;Bob;Frank;BB
+Första besök
+OK
 $%$
-2;Carl;Diana;Alice;Akuten
+2;Carl;Alice;Diana;Akuten
 Info rad 1
 Info rad 2
 Info rad 3
 $%$
-3;Frank;Dina;Alice;BB
-Frank på BB
-det är kul
+3;Eva;Bob;Frank;BB
+Rutinkontroll
 $%$
-4;Carl;Diana;Alice;Rehab
+4;Carl;Alice;Diana;Akuten
 Återbesök
 Rutinkontroll
 OK
+$%$
+5;Eva;Alice;Diana;Akuten
+Ingen fara
 $%$
