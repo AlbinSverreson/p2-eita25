@@ -31,11 +31,7 @@ public class Server implements Runnable {
     }
 
     private void loadPersons() {
-        persons = PersonParser.createPersons("./testfiles/persons.txt");
-    }
-
-    private void askForAction() {
-
+        persons = PersonParser.parse("./testfiles/persons.txt");
     }
 
 

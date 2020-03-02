@@ -6,7 +6,7 @@ import java.util.*;
 
 public class PersonParser {
     
-    public static List<Person> createPersons(String filename) {
+    public static List<Person> parse(String filename) {
         ArrayList<Person> persons = new ArrayList<>();
 
         try {
