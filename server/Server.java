@@ -59,11 +59,13 @@ public class Server implements Runnable {
 
     private String handleCommand(String msg, Person p){//DENNA ÄR LITE FEL DÅ AUTHENATICATOR SKA GÖRA LOGIKEN GÖR OM GÖR RÄTT
         String[] words = msg.split(" ");
-        if (words.length == 2) {
+        //if (words.length == 2) {
             switch (words[0]) {
                 case "list":
+                    if (words.length != 2) return "Wrong syntax";
                     return getRecords(p, words[1]);
                 case "read":
+                    if (words.length != 2) return "Wrong syntax";
                     try {
                         int requestedRec = Integer.parseInt(words[1]);
                         Record rec = records.get(requestedRec);
@@ -71,20 +73,46 @@ public class Server implements Runnable {
                             return rec.toString();
                         } else {
                             return "You don't have access to this record, or it does not exist.";
-                        }                        
+                        }
                     } catch (NumberFormatException e) {
                         return "The second argument needs to be a number.";
                     }
                 case "write":
-                    break;
+                    if (words.length != 3) return "Wrong syntax";
+                    try {
+                        int requestedRec = Integer.parseInt(words[1]);
+                        Record rec = records.get(requestedRec);
+                        if (rec!= null && authenticator.canWrite(p, rec)) {
+			    rec.addInfo(words[2]);
+                            return "Record updated";
+                        } else {
+                            return "You don't have access to this record, or it does not exist.";
+                        }
+                    } catch (NumberFormatException e) {
+                        return "The second argument needs to be a number.";
+                    }
                 case "delete":
+                    if (words.length != 2) return "Wrong syntax";
+		    try {
+                        int requestedRec = Integer.parseInt(words[1]);
+                        Record rec = records.get(requestedRec);
+                        if (rec!= null && authenticator.canDelete(p, rec)) {
+			    records.remove(requestedRec); // Also remove from the patients map
+                            return "Record deleted";
+                        } else {
+                            return "You don't have access to this record, or it does not exist.";
+                        }
+                    } catch (NumberFormatException e) {
+                        return "The second argument needs to be a number.";
+                    }
                     break;
                 case "create":
+                    if (words.length != 2) return "Wrong syntax";
                     break;
                 default:
                     return "Wrong syntax";
             }
-        }
+        //}
         return "";
     }
 
@@ -100,7 +128,7 @@ public class Server implements Runnable {
             numConnectedClients++;
 
             // these two lines are filtering out the clients name.
-            String subjectNameCN =  subject.split(" ")[0]; 
+            String subjectNameCN =  subject.split(" ")[0];
             String subjectName = subjectNameCN.substring(3, subjectNameCN.length()-1);
 
             int i = 0;
@@ -117,7 +145,7 @@ public class Server implements Runnable {
                 }
                 i++;
             }
-            
+
             if (!isFound) {
                 socket.close();
                 numConnectedClients--;
@@ -206,3 +234,4 @@ public class Server implements Runnable {
         return null;
     }
 }
+

@@ -47,6 +47,10 @@ public class Record{
     return info;
   }
 
+  public void addInfo(String newInfo){
+    info += newInfo + "\n";
+  }
+
   public String toString(){
     StringBuilder sb = new StringBuilder();
     sb.append("Record ID: ").append(id).append("\n");
