@@ -74,12 +74,17 @@ public class Server implements Runnable {
                         return "The second argument needs to be a number.";
                     }
                 case "write":
-                    if (words.length != 3) return "Wrong syntax";
+                    if (words.length < 3) return "Wrong syntax: write [id] [info]";
                     try {
                         int requestedRec = Integer.parseInt(words[1]);
                         Record rec = records.get(requestedRec);
                         if (rec!= null && authenticator.canWrite(p, rec)) {
-			    rec.addInfo(words[2]);
+                            StringBuilder sb = new StringBuilder().append("\n");
+                            for (int i = 2; i < words.length; i++) {
+                                sb.append(words[i]).append(" ");
+                            }
+                            rec.addInfo(sb.toString());
+                            RecordParser.write(records.values(), "./testfiles/exempelRecord.txt");
                             return "Record updated";
                         } else {
                             return "You don't have access to this record, or it does not exist.";
@@ -89,11 +94,11 @@ public class Server implements Runnable {
                     }
                 case "delete":
                     if (words.length != 2) return "Wrong syntax";
-		    try {
+		            try {
                         int requestedRec = Integer.parseInt(words[1]);
                         Record rec = records.get(requestedRec);
                         if (rec!= null && authenticator.canDelete(p, rec)) {
-			    records.remove(requestedRec); // Also remove from the patients map
+			                records.remove(requestedRec); // Also remove from the patients map
                             return "Record deleted";
                         } else {
                             return "You don't have access to this record, or it does not exist.";
@@ -188,8 +193,7 @@ public class Server implements Runnable {
             String clientMsg = null;
             while ((clientMsg = in.readLine()) != null) {
                 String response = handleCommand(clientMsg, currentClient, in, out);
-                out.print(response);
-                out.println("");
+                out.println(response);
                 out.println("");
 				out.flush();
                 System.out.println("done\n");

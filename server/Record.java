@@ -48,7 +48,7 @@ public class Record{
   }
 
   public void addInfo(String newInfo){
-    info += newInfo + "\n";
+    info += newInfo;
   }
 
   public String toString(){

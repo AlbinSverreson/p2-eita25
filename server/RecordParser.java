@@ -25,11 +25,12 @@ public class RecordParser {
 
   public static void write(Collection<Record> records, String recordFile) {
     try {
-      PrintWriter writer = new PrintWriter(new FileWriter(recordFile));
+      PrintWriter writer = new PrintWriter(new FileWriter(recordFile),true);
       for (Record r: records) {
         writer.append(r.getID() + ";" + r.getPatient() + ";" + r.getDoctor() + ";" + r.getNurse() + ";" + r.getDivision());
-        writer.append("\n").append(r.getInfo()).append("\n").append(recordSeparator).append("\n");
+        writer.append(r.getInfo()).append("\n").append(recordSeparator).append("\n");
       }
+      writer.flush();
       writer.close();
     } catch (IOException e) {
       e.printStackTrace();
