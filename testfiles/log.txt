@@ -1,2 +1,6 @@
 2020-03-02 12:55:03 ; Doctor Alice listed Carl's records#2 #4 .
 2020-03-02 13:00:07 ; Doctor Alice listed Carl's records #2 #4 .
+2020-03-03 10:26:31 ; Doctor Alice listed Carl's records #2 #4 .
+2020-03-03 10:26:48 ; Doctor Alice accessed Carl's record #4 for reading.
+2020-03-03 10:26:57 ; Doctor Alice accessed Carl's record #2 for reading.
+2020-03-03 10:27:03 ; Doctor Alice accessed Eva's record #3 for reading.

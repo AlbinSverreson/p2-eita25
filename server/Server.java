@@ -101,11 +101,10 @@ public class Server implements Runnable {
                     } catch (NumberFormatException e) {
                         return "The second argument needs to be a number.";
                     }
-                    break;
                 case "create":
                     if (words.length != 2) return "Wrong syntax";
                     int newRecId = records.size() + 1;
-                    Person patient;
+                    Person patient = null;
                     String nurseName;
                     String divisionName;
                     String info;
@@ -114,26 +113,27 @@ public class Server implements Runnable {
                     }
                     if(patient==null) return "No such patient in the system";
                     if(!authenticator.canCreate(p, patient)) return "You do not have the permissions to create that record.";
+                    try {
+                        out.println("What is the name of the nurse?");
+                        nurseName = in.readLine();
+                        out.println("What is the name of the division?");
+                        divisionName = in.readLine();
+                        out.println("What info should be stored in the record?");
+                        info = in.readLine();
 
-                    out.println("What is the name of the nurse?");
-                    nurseName = in.readLine();
-                    out.println("What is the name of the division?");
-                    divisionName = in.readLine();
-                    out.println("What info should be stored in the record?");
-                    info = in.readLine();
+                        records.put(newRecId, new Record(
+                            Integer.toString(newRecId), patient.getName(), p.getName(), nurseName, divisionName, info
+                        ));
 
-                    records.put(newRecId, new Record(
-                        Integer.toString(newRecId), patient.getName(), p.getName(), nurseName, divisionName, info
-                    ));
-
-                    return "Record created.";
-
-                    break;
+                        return "Record created.";
+                    } catch (Exception e) {
+                        return "uwu something went wrong";
+                    }
+                    
                 default:
                     return "Wrong syntax";
             }
         //}
-        return "";
     }
 
     public void run() {
