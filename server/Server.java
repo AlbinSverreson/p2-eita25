@@ -50,7 +50,7 @@ public class Server implements Runnable {
                     return "ID's of records you have access to: " + recordString;
                 }
             } catch(NullPointerException e) {
-                return "You don't have read access for any of" + name + "'s records, or no such patient was found.";
+                return "You don't have read access for any of " + name + "'s records, or no such patient was found.";
             }
         }
 
@@ -136,7 +136,7 @@ public class Server implements Runnable {
                     } catch (Exception e) {
                         return "uwu something went wrong";
                     }
-                    case "help": 
+                    case "help":
                         StringBuilder sb = new StringBuilder();
                         sb.append("The following commands are available: \n").append("list [patient] \n");
                         sb.append("read [record id] \n").append("write [record id] [info] \n");
@@ -267,4 +267,3 @@ public class Server implements Runnable {
         return null;
     }
 }
-

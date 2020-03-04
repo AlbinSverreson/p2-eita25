@@ -22,7 +22,7 @@ public class Authenticator {
         return rl;
       }
       else {
-        logger.log(role + " " + name + " tried to list" + patient + "'s records, but was denied.");
+        logger.log(role + " " + name + " tried to list " + patient + "'s records, but was denied.");
         return new ArrayList<>();
       }
     }
@@ -30,7 +30,7 @@ public class Authenticator {
     if (p.isRole("Government")) {
       logger.log(role + " " + name + " listed " + patient + "'s records.");
       return rl;
-    } 
+    }
 
     List<Record> permittedRecords = new ArrayList<>();
     String logString = "";
@@ -39,11 +39,11 @@ public class Authenticator {
       if (p.isTreating(r.getPatient()) || p.inDivision(r.getDivision())) {
         logString += "#" + r.getID() + " ";
         permittedRecords.add(r);
-      } 
+      }
     }
 
     if (logString.equals("")) {
-      logger.log(role + " " + name + " tried to list" + patient + "'s records, but was denied.");
+      logger.log(role + " " + name + " tried to list " + patient + "'s records, but was denied.");
     } else {
       logger.log(role + " " + name + " listed " + patient + "'s records " + logString + ".");
     }
@@ -62,14 +62,14 @@ public class Authenticator {
     if (p.isRole("Government")) {
       logger.log(role + " " + name + " accessed record #" + id + " for reading.");
       return true;
-    } 
+    }
     if (p.isRole("Patient")) {
       if (patient.equals(name)) {
         logger.log(role + " " + name + " accessed their record #" + id + " for reading.");
         return true;
       }
       else {
-        logger.log(role + " " + name + " tried to read" + patient + "'s record #" + id + ", but was denied.");
+        logger.log(role + " " + name + " tried to read " + patient + "'s record #" + id + ", but was denied.");
         return false;
       }
     }
@@ -103,7 +103,7 @@ public class Authenticator {
     String name = p1.getName();
     String patient = p2.getName();
     String role = p1.getRole();
-    
+
     if (p1.isRole("Doctor") && p1.isTreating(p2.getName())) {
       logger.log(role + " " + name + " created a new record for patient " + patient + ".");
       return true;
@@ -116,7 +116,7 @@ public class Authenticator {
     String name = p.getName();
     String role = p.getRole();
     String id = r.getID();
-    
+
     if (p.isRole("Government")) {
       logger.log(role + " " + name + " deleted record #" + id + ".");
       return true;
