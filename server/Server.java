@@ -98,7 +98,8 @@ public class Server implements Runnable {
                         int requestedRec = Integer.parseInt(words[1]);
                         Record rec = records.get(requestedRec);
                         if (rec!= null && authenticator.canDelete(p, rec)) {
-                            records.remove(requestedRec); // Also remove from the patients map
+                            records.remove(requestedRec);
+                            patients.get(rec.getPatient()).remove(rec); // Also remove from the patients map
                             RecordParser.write(records.values(), "./testfiles/exempelRecord.txt");
                             return "Record deleted";
                         } else {
