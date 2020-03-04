@@ -140,7 +140,7 @@ public class Server implements Runnable {
                         StringBuilder sb = new StringBuilder();
                         sb.append("The following commands are available: \n").append("list [patient] \n");
                         sb.append("read [record id] \n").append("write [record id] [info] \n");
-                        sb.append("delete [record id] \n").append("create [patient]");
+                        sb.append("delete [record id] \n").append("create [patient] \n").append("quit");
                         return sb.toString();
                     case "quit":
                         quit = true;
