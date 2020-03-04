@@ -14,6 +14,7 @@ public class Server implements Runnable {
     private Map<String,List<Record>> patients;
     private Map<Integer, Record> records;
     private Authenticator authenticator = new Authenticator("./testfiles/log.txt");
+    boolean quit = false;
 
     public Server(ServerSocket ss) throws IOException {
         serverSocket = ss;
@@ -55,13 +56,12 @@ public class Server implements Runnable {
 
     private String handleCommand(String msg, Person p, BufferedReader in, PrintWriter out){//DENNA ÄR LITE FEL DÅ AUTHENATICATOR SKA GÖRA LOGIKEN GÖR OM GÖR RÄTT
         String[] words = msg.split(" ");
-        //if (words.length == 2) {
             switch (words[0]) {
                 case "list":
-                    if (words.length != 2) return "Wrong syntax";
+                    if (words.length != 2) return "Wrong syntax, try: list [patient]";
                     return getRecords(p, words[1]);
                 case "read":
-                    if (words.length != 2) return "Wrong syntax";
+                    if (words.length != 2) return "Wrong syntax, try: read [record id]";
                     try {
                         int requestedRec = Integer.parseInt(words[1]);
                         Record rec = records.get(requestedRec);
@@ -74,7 +74,7 @@ public class Server implements Runnable {
                         return "The second argument needs to be a number.";
                     }
                 case "write":
-                    if (words.length < 3) return "Wrong syntax: write [id] [info]";
+                    if (words.length < 3) return "Wrong syntax, try: write [record id] [info]";
                     try {
                         int requestedRec = Integer.parseInt(words[1]);
                         Record rec = records.get(requestedRec);
@@ -93,12 +93,13 @@ public class Server implements Runnable {
                         return "The second argument needs to be a number.";
                     }
                 case "delete":
-                    if (words.length != 2) return "Wrong syntax";
+                    if (words.length != 2) return "Wrong syntax, try: delete [record id]";
 		            try {
                         int requestedRec = Integer.parseInt(words[1]);
                         Record rec = records.get(requestedRec);
                         if (rec!= null && authenticator.canDelete(p, rec)) {
-			                records.remove(requestedRec); // Also remove from the patients map
+                            records.remove(requestedRec); // Also remove from the patients map
+                            RecordParser.write(records.values(), "./testfiles/exempelRecord.txt");
                             return "Record deleted";
                         } else {
                             return "You don't have access to this record, or it does not exist.";
@@ -107,7 +108,7 @@ public class Server implements Runnable {
                         return "The second argument needs to be a number.";
                     }
                 case "create":
-                    if (words.length != 2) return "Wrong syntax";
+                    if (words.length != 2) return "Wrong syntax, try: create [patient]";
                     int newRecId = records.size() + 1;
                     Person patient = null;
                     String nurseName;
@@ -134,11 +135,18 @@ public class Server implements Runnable {
                     } catch (Exception e) {
                         return "uwu something went wrong";
                     }
-                    
+                    case "help": 
+                        StringBuilder sb = new StringBuilder();
+                        sb.append("The following commands are available: \n").append("list [patient] \n");
+                        sb.append("read [record id] \n").append("write [record id] [info] \n");
+                        sb.append("delete [record id] \n").append("create [patient]");
+                        return sb.toString();
+                    case "quit":
+                        quit = true;
+
                 default:
-                    return "Wrong syntax";
+                    return "Wrong syntax, try: [command] [patient or id], or type in 'help' to see available commands.";
             }
-        //}
     }
 
     public void run() {
@@ -191,7 +199,7 @@ public class Server implements Runnable {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
             String clientMsg = null;
-            while ((clientMsg = in.readLine()) != null) {
+            while ((clientMsg = in.readLine()) != null && !quit) {
                 String response = handleCommand(clientMsg, currentClient, in, out);
                 out.println(response);
                 out.println("");
