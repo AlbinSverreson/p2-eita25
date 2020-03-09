@@ -23,7 +23,7 @@ $%$
 6;Carl;Alice;Frank;Akuten
 Carl är död :( 
 $%$
-7;Eva;Bob;Diana;E-husets
+7;Eva;Bob;Diana;BB
 Hon bongade typ 26 bärs och fick bli hemburen
 Update: hon är hos Johannes och äter brunch så hon klarar sig nog... 
 $%$
