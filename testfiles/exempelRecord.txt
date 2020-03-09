@@ -1,6 +1,7 @@
 1;Eva;Bob;Frank;BB
 Första besök
 OK
+Inte ok 
 $%$
 2;Carl;Alice;Diana;Akuten
 Info rad 1
@@ -18,7 +19,7 @@ $%$
 5;Eva;Alice;Diana;Akuten
 Ingen fara
 Hi again 
-once moore
+once more
 $%$
 6;Carl;Alice;Frank;Akuten
 Carl är död :( 

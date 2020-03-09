@@ -155,7 +155,7 @@ public class Server implements Runnable {
                     } catch (Exception e) {
                         return "uwu something went wrong";
                     }*/
-                    return "Record created";
+                    return "Record created, id: "+ Integer.toString(newRecId);
                     case "help":
                         StringBuilder sb = new StringBuilder();
                         sb.append("The following commands are available: \n").append("list [patient] \n");
@@ -243,8 +243,8 @@ public class Server implements Runnable {
     private void newListener() { (new Thread(this)).start(); } // calls run()
 
     public static void main(String args[]) {
-        if(args.length!=2){
-            System.out.println("Wrong syntax, java Server [port] [ip]");
+        if(args.length!=1){
+            System.out.println("Wrong syntax, java Server [port]");
             return;
         }
         System.out.println("\nServer Started\n");

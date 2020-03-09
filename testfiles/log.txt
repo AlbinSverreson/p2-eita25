@@ -61,3 +61,15 @@
 2020-03-09 13:43:11 ; Doctor Bob accessed Eva's record #7 for reading.
 2020-03-09 13:43:35 ; Doctor Bob accessed Eva's record #7 for writing.
 2020-03-09 13:43:48 ; Doctor Bob accessed Eva's record #5 for writing.
+2020-03-09 13:55:30 ; Doctor Bob listed Eva's records #1 #3 #5 #7 .
+2020-03-09 13:55:48 ; Doctor Bob tried to list Carl's records, but was denied.
+2020-03-09 13:56:01 ; Doctor Bob listed Eva's records #1 #3 #5 #7 .
+2020-03-09 13:56:07 ; Doctor Bob accessed Eva's record #1 for reading.
+2020-03-09 13:56:17 ; Doctor Bob tried to read Carl's record #2 but was denied.
+2020-03-09 13:56:41 ; Doctor Bob tried to write to Carl's record #2 but was denied.
+2020-03-09 13:56:51 ; Doctor Bob accessed Eva's record #1 for reading.
+2020-03-09 13:57:03 ; Doctor Bob accessed Eva's record #1 for writing.
+2020-03-09 13:57:06 ; Doctor Bob accessed Eva's record #1 for reading.
+2020-03-09 13:57:41 ; Doctor Bob created a new record for patient Eva.
+2020-03-09 13:57:47 ; Doctor Bob accessed Eva's record #8 for reading.
+2020-03-09 13:57:53 ; Doctor Bob tried to delete record #8 but was denied.
