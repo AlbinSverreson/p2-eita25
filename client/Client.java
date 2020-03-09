@@ -19,14 +19,15 @@ public class Client {
 
 
     public static void main(String[] args) throws Exception {
+        if(args.length!=2){
+            System.out.println("Wrong syntax, java Client [host] [port]");
+            return;
+        }
         Console cons = System.console();
         String host = null;
         int port = -1;
         System.out.println("Connecting to " + args[0] + " on port " + args[1]);
-        if (args.length < 2) {
-            System.out.println("USAGE: java client host port");
-            System.exit(-1);
-        }
+
         try { /* get input parameters */
             host = args[0];
             port = Integer.parseInt(args[1]);
@@ -50,12 +51,18 @@ public class Client {
                 KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
                 TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
                 SSLContext ctx = SSLContext.getInstance("TLS");
-                ks.load(new FileInputStream("./certificates/" + ksName), password);  // keystore password (storepass)
-				ts.load(new FileInputStream("./certificates/" + tsName), password); // truststore password (storepass);
-				kmf.init(ks, password); // user password (keypass)
-				tmf.init(ts); // keystore can be used as truststore here
-				ctx.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
-                factory = ctx.getSocketFactory();
+                try {
+                    ks.load(new FileInputStream("./certificates/" + ksName), password);  // keystore password (storepass)
+				    ts.load(new FileInputStream("./certificates/" + tsName), password); // truststore password (storepass);
+				    kmf.init(ks, password); // user password (keypass)
+				    tmf.init(ts); // keystore can be used as truststore here
+				    ctx.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
+                    factory = ctx.getSocketFactory();
+                } catch (Exception e) {
+                    System.out.println("Wrong password or keystore not trusted");
+                    return;
+                }
+                
             } catch (Exception e) {
                 throw new IOException(e.getMessage());
             }
@@ -89,6 +96,20 @@ public class Client {
                 msg = read.readLine(); //LÄSER IN MEDDELANDE ATT SKICKA
                 if (msg.equalsIgnoreCase("quit")) {
 				    break;
+                }
+                if (msg.split(" ")[0].equals("create") && msg.split(" ").length==2){
+                    String nurse = "";
+                    String division = "";
+                    String info = "";
+                    String patient = msg.split(" ")[1];
+
+                    System.out.println("What is the name of the nurse?");
+                    nurse = read.readLine().split(" ")[0];
+                    System.out.println("What is the name of the division?");
+                    division = read.readLine().split(" ")[0];
+                    System.out.println("What info should be stored in the record?");
+                    info = read.readLine();
+                    msg = "create " + patient + " " + nurse + " " + division + " " + info;
                 }
                 out.println(msg);//Skickar meddelandet till servern
                 out.flush();

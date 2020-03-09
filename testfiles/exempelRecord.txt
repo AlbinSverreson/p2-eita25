@@ -13,13 +13,17 @@ $%$
 4;Carl;Alice;Diana;Akuten
 Återbesök
 Rutinkontroll
-OKTest
-bbbb 
-ccccc 
-dddddd 
+Test
 $%$
 5;Eva;Alice;Diana;Akuten
 Ingen fara
 Hi again 
 once moore
+$%$
+6;Carl;Alice;Frank;Akuten
+Carl är död :( 
+$%$
+7;Eva;Bob;Diana;E-husets
+Hon bongade typ 26 bärs och fick bli hemburen
+Update: hon är hos Johannes och äter brunch så hon klarar sig nog... 
 $%$

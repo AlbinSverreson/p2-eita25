@@ -54,7 +54,7 @@ public class Server implements Runnable {
             }
         }
 
-    private String handleCommand(String msg, Person p, BufferedReader in, PrintWriter out){//DENNA ÄR LITE FEL DÅ AUTHENATICATOR SKA GÖRA LOGIKEN GÖR OM GÖR RÄTT
+    private String handleCommand(String msg, Person p, BufferedReader in, PrintWriter out){
         String[] words = msg.split(" ");
             switch (words[0]) {
                 case "list":
@@ -109,23 +109,42 @@ public class Server implements Runnable {
                         return "The second argument needs to be a number.";
                     }
                 case "create":
-                    if (words.length != 2) return "Wrong syntax, try: create [patient]";
+                    if (words.length < 5) return "Wrong syntax, try: create [patient]";
                     int newRecId = records.size() + 1;
                     Person patient = null;
                     String nurseName;
                     String divisionName;
                     String info;
                     for (Person p1 : persons){
-                        if (p1.getName()==words[1]) patient = p1;
+                        if (p1.getName().equals(words[1])) patient = p1;
                     }
                     if(patient==null) return "No such patient in the system";
                     if(!authenticator.canCreate(p, patient)) return "You do not have the permissions to create that record.";
-                    try {
+
+                    nurseName = words[2];
+                    divisionName = words[3];
+                    StringBuilder infobuilder = new StringBuilder().append("\n");
+                    
+
+                    for(int i = 4; i < words.length; i++){
+                        infobuilder.append(words[i] + " ");
+                    }
+                    info = infobuilder.toString();
+                    
+                    Record newRec = new Record(Integer.toString(newRecId), patient.getName(), p.getName(), nurseName, divisionName, info);
+                    records.put(newRecId, newRec);
+                    patients.get(patient.getName()).add(newRec);
+                    RecordParser.write(records.values(), "./testfiles/exempelRecord.txt");
+                    /*try {
+
                         out.println("What is the name of the nurse?");
+                        while ((nurseName = in.readLine()) != null)
                         nurseName = in.readLine();
                         out.println("What is the name of the division?");
+                        while ((divisionName = in.readLine()) != null)
                         divisionName = in.readLine();
                         out.println("What info should be stored in the record?");
+                        while ((info = in.readLine()) != null)
                         info = in.readLine();
 
                         records.put(newRecId, new Record(
@@ -135,7 +154,8 @@ public class Server implements Runnable {
                         return "Record created.";
                     } catch (Exception e) {
                         return "uwu something went wrong";
-                    }
+                    }*/
+                    return "Record created";
                     case "help":
                         StringBuilder sb = new StringBuilder();
                         sb.append("The following commands are available: \n").append("list [patient] \n");
@@ -223,6 +243,10 @@ public class Server implements Runnable {
     private void newListener() { (new Thread(this)).start(); } // calls run()
 
     public static void main(String args[]) {
+        if(args.length!=2){
+            System.out.println("Wrong syntax, java Server [port] [ip]");
+            return;
+        }
         System.out.println("\nServer Started\n");
         int port = -1;
         if (args.length >= 1) {
